@@ -13,3 +13,4 @@ class Solution:
                 i = i + 1
         return max_consecutive
 
+

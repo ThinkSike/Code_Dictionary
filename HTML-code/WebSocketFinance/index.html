@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Financial Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <h1>FinanceStream</h1>
+            </div>
+            <div class="connection-status">
+                <div class="status-indicator" id="connectionStatus">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Connecting...</span>
+                </div>
+                <div class="client-count">
+                    <i class="fas fa-users"></i>
+                    <span id="clientCount">0</span> users online
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dashboard -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Market Overview -->
+            <section class="market-overview">
+                <h2><i class="fas fa-chart-bar"></i> Market Overview</h2>
+                <div class="indices-grid" id="marketIndices">
+                    <!-- Market indices will be populated here -->
+                </div>
+            </section>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Stock Prices Widget -->
+                <section class="widget stock-widget">
+                    <div class="widget-header">
+                        <h3><i class="fas fa-line-chart"></i> Live Stock Prices</h3>
+                        <div class="widget-controls">
+                            <button class="refresh-btn" onclick="refreshStocks()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="stocks-list" id="stocksList">
+                            <!-- Stock items will be populated here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Currency Exchange Widget -->
+                <section class="widget currency-widget">
+                    <div class="widget-header">
+                        <h3><i class="fas fa-exchange-alt"></i> Currency Exchange</h3>
+                        <div class="widget-controls">
+                            <button class="refresh-btn" onclick="refreshCurrencies()">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="currencies-list" id="currenciesList">
+                            <!-- Currency items will be populated here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Live Updates Feed -->
+                <section class="widget updates-widget">
+                    <div class="widget-header">
+                        <h3><i class="fas fa-bell"></i> Live Updates</h3>
+                        <div class="widget-controls">
+                            <button class="clear-btn" onclick="clearUpdates()">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="updates-feed" id="updatesFeed">
+                            <div class="no-updates">
+                                <i class="fas fa-clock"></i>
+                                <p>Waiting for live updates...</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Market Statistics -->
+                <section class="widget stats-widget">
+                    <div class="widget-header">
+                        <h3><i class="fas fa-chart-pie"></i> Market Statistics</h3>
+                    </div>
+                    <div class="widget-content">
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-arrow-trend-up"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Updates Received</span>
+                                    <span class="stat-value" id="updatesCount">0</span>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Last Update</span>
+                                    <span class="stat-value" id="lastUpdate">--:--:--</span>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-server"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Server Status</span>
+                                    <span class="stat-value" id="serverStatus">Connected</span>
+                                </div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-icon">
+                                    <i class="fas fa-wifi"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-label">Latency</span>
+                                    <span class="stat-value" id="latency">-- ms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Stock Subscription Panel -->
+            <section class="subscription-panel">
+                <h3><i class="fas fa-star"></i> Stock Subscriptions</h3>
+                <div class="subscription-controls">
+                    <select id="stockSelect">
+                        <option value="">Select a stock to subscribe</option>
+                        <option value="AAPL">Apple Inc. (AAPL)</option>
+                        <option value="GOOGL">Alphabet Inc. (GOOGL)</option>
+                        <option value="TSLA">Tesla Inc. (TSLA)</option>
+                        <option value="AMZN">Amazon.com Inc. (AMZN)</option>
+                        <option value="MSFT">Microsoft Corp. (MSFT)</option>
+                        <option value="NVDA">NVIDIA Corp. (NVDA)</option>
+                    </select>
+                    <button class="subscribe-btn" onclick="subscribeToStock()">
+                        <i class="fas fa-plus"></i> Subscribe
+                    </button>
+                </div>
+                <div class="subscribed-stocks" id="subscribedStocks">
+                    <div class="no-subscriptions">
+                        <i class="fas fa-info-circle"></i>
+                        <p>No stock subscriptions yet. Select a stock above to get started.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 FinanceStream - Real-Time Financial Dashboard</p>
+            <p>Powered by WebSockets & Socket.IO</p>
+        </div>
+    </footer>
+
+    <!-- Socket.IO Client Library -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="js/app.js"></script>
+</body>
+</html>

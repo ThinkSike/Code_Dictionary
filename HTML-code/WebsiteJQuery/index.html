@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Showcase - Premium Electronics</title>
+    
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    
+    <!-- Bootstrap CSS for additional styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: var(--dark-color);
+            padding-top: 70px;
+        }
+
+        /* Header Styles */
+        .navbar {
+            background-color: var(--secondary-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+        }
+
+        /* Main Gallery Styles */
+        .gallery-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .main-image-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background-color: var(--light-color);
+        }
+
+        .image-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: background 0.3s;
+        }
+
+        .image-nav:hover {
+            background: rgba(0,0,0,0.8);
+        }
+
+        .prev-btn {
+            left: 10px;
+        }
+
+        .next-btn {
+            right: 10px;
+        }
+
+        .thumbnails {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .thumbnail {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        .thumbnail.active {
+            border-color: var(--primary-color);
+        }
+
+        /* Product Info Styles */
+        .product-info {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .product-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .product-description {
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .add-to-cart {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #2980b9;
+        }
+
+        /* Widget Styles */
+        .widget-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .widget-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            margin-bottom: 30px;
+        }
+
+        .filter-group {
+            margin-bottom: 20px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* Cart Styles */
+        .cart-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+
+        .checkout-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Draggable Items */
+        .draggable-item {
+            width: 150px;
+            padding: 10px;
+            margin: 5px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: move;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .draggable-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .draggable-item img {
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        .draggable-item .product-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .draggable-item .product-price {
+            color: var(--accent-color);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .droppable-area {
+            min-height: 200px;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            text-align: center;
+            background: #f9f9f9;
+        }
+
+        .droppable-area.active {
+            border-color: var(--primary-color);
+            background: #e3f2fd;
+        }
+
+        .comparison-table {
+            width: 100%;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .comparison-table.show {
+            display: table;
+        }
+
+        .comparison-table th {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .comparison-table .product-col {
+            text-align: center;
+            vertical-align: top;
+        }
+
+        .comparison-table .product-col img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .comparison-table .remove-btn {
+            margin-top: 10px;
+        }
+
+        .comparison-instruction {
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .compared-item {
+            display: inline-block;
+            margin: 5px;
+            vertical-align: top;
+        }
+
+        /* Resizable Element */
+        .resizable-item {
+            width: 200px;
+            height: 200px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            overflow: auto;
+        }
+
+        /* Selectable Items */
+        .selectable-container .ui-selecting {
+            background: #e3f2fd;
+        }
+        .selectable-container .ui-selected {
+            background: #bbdefb;
+            color: var(--primary-color);
+        }
+
+        /* Sortable Items */
+        .sortable-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sortable-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: move;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .gallery-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .product-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-shopping-bag me-2"></i>Premium Electronics</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#gallery">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#products">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#cart">Cart</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Gallery Section -->
+        <section id="gallery" class="gallery-container">
+            <div class="gallery-header">
+                <h2>Product Gallery</h2>
+                <div id="gallery-controls">
+                    <button id="play-slideshow" class="btn btn-outline-primary">
+                        <i class="fas fa-play me-1"></i> Slideshow
+                    </button>
+                </div>
+            </div>
+            
+            <div class="main-image-container">
+                <img id="main-image" class="main-image" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=500&fit=crop" alt="Premium Wireless Headphones">
+                <button class="image-nav prev-btn"><i class="fas fa-chevron-left"></i></button>
+                <button class="image-nav next-btn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            <div class="thumbnails" id="thumbnails">
+                <!-- Thumbnails will be generated by JavaScript -->
+            </div>
+            
+            <!-- Gallery Slider -->
+            <div class="mt-4">
+                <label for="gallery-slider">Navigate Gallery:</label>
+                <div id="gallery-slider"></div>
+            </div>
+        </section>
+
+        <!-- Product Information -->
+        <section class="product-info">
+            <h1 class="product-title">Premium Wireless Headphones</h1>
+            <div class="product-price">$199.99</div>
+            <p class="product-description">
+                Experience crystal-clear sound with our premium wireless headphones. Featuring active noise cancellation, 
+                30-hour battery life, and comfortable over-ear design. Perfect for music lovers, travelers, and professionals.
+            </p>
+            
+            <div class="product-actions">
+                <div class="quantity-control">
+                    <label for="quantity">Quantity:</label>
+                    <input id="quantity" type="number" min="1" max="10" value="1">
+                </div>
+                <button class="add-to-cart" id="add-to-cart-btn">
+                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                </button>
+            </div>
+            
+            <!-- Product Options -->
+            <div class="product-options mt-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="color-option">Color:</label>
+                        <div id="color-option">
+                            <input type="radio" id="color-black" name="color" value="black" checked>
+                            <label for="color-black">Black</label>
+                            <input type="radio" id="color-white" name="color" value="white">
+                            <label for="color-white">White</label>
+                            <input type="radio" id="color-blue" name="color" value="blue">
+                            <label for="color-blue">Blue</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="warranty-option">Warranty:</label>
+                        <select id="warranty-option">
+                            <option>1 Year Standard</option>
+                            <option>2 Year Extended (+$29.99)</option>
+                            <option>3 Year Premium (+$49.99)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Filters -->
+        <section class="widget-container filter-section">
+            <h3 class="widget-title">Product Filters</h3>
+            
+            <div class="filter-group">
+                <label class="filter-label">Search Products:</label>
+                <input id="product-search" type="text" placeholder="Search for products...">
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Category:</label>
+                <div id="category-filter">
+                    <input type="checkbox" id="cat-headphones" name="category" value="headphones" checked>
+                    <label for="cat-headphones">Headphones</label>
+                    <input type="checkbox" id="cat-earbuds" name="category" value="earbuds">
+                    <label for="cat-earbuds">Earbuds</label>
+                    <input type="checkbox" id="cat-speakers" name="category" value="speakers">
+                    <label for="cat-speakers">Speakers</label>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Price Range:</label>
+                <div id="price-range">
+                    <div id="price-slider"></div>
+                    <div class="d-flex justify-content-between">
+                        <span>$<span id="min-price">50</span></span>
+                        <span>$<span id="max-price">500</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Sort By:</label>
+                <select id="sort-products">
+                    <option>Featured</option>
+                    <option>Price: Low to High</option>
+                    <option>Price: High to Low</option>
+                    <option>Newest First</option>
+                    <option>Top Rated</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label class="filter-label">Availability:</label>
+                <div id="availability-filter">
+                    <input type="radio" id="avail-all" name="availability" value="all" checked>
+                    <label for="avail-all">All</label>
+                    <input type="radio" id="avail-in-stock" name="availability" value="in-stock">
+                    <label for="avail-in-stock">In Stock</label>
+                    <input type="radio" id="avail-on-sale" name="availability" value="on-sale">
+                    <label for="avail-on-sale">On Sale</label>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Tabs -->
+        <section class="widget-container">
+            <h3 class="widget-title">Product Categories</h3>
+            <div id="product-tabs">
+                <ul>
+                    <li><a href="#featured">Featured</a></li>
+                    <li><a href="#headphones">Headphones</a></li>
+                    <li><a href="#earbuds">Earbuds</a></li>
+                    <li><a href="#speakers">Speakers</a></li>
+                </ul>
+                
+                <div id="featured">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=200&fit=crop" class="card-img-top" alt="Premium Headphones">
+                                <div class="card-body">
+                                    <h5 class="card-title">Premium Headphones</h5>
+                                    <p class="card-text">High-quality wireless headphones with noise cancellation.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$199.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=300&h=200&fit=crop" class="card-img-top" alt="Wireless Earbuds">
+                                <div class="card-body">
+                                    <h5 class="card-title">Wireless Earbuds</h5>
+                                    <p class="card-text">True wireless earbuds with charging case.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$129.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&h=200&fit=crop" class="card-img-top" alt="Bluetooth Speaker">
+                                <div class="card-body">
+                                    <h5 class="card-title">Bluetooth Speaker</h5>
+                                    <p class="card-text">Portable speaker with 360-degree sound.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$89.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="headphones">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?w=300&h=200&fit=crop" class="card-img-top" alt="Studio Headphones">
+                                <div class="card-body">
+                                    <h5 class="card-title">Studio Headphones</h5>
+                                    <p class="card-text">Professional-grade studio headphones.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$249.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=300&h=200&fit=crop" class="card-img-top" alt="Gaming Headset">
+                                <div class="card-body">
+                                    <h5 class="card-title">Gaming Headset</h5>
+                                    <p class="card-text">Immersive gaming headset with microphone.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$159.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1577174881658-0f30ed549adc?w=300&h=200&fit=crop" class="card-img-top" alt="Sports Headphones">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sports Headphones</h5>
+                                    <p class="card-text">Sweat-resistant headphones for workouts.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$99.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="earbuds">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=300&h=200&fit=crop" class="card-img-top" alt="True Wireless Earbuds">
+                                <div class="card-body">
+                                    <h5 class="card-title">True Wireless Earbuds</h5>
+                                    <p class="card-text">Premium true wireless earbuds with ANC.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$179.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?w=300&h=200&fit=crop" class="card-img-top" alt="Budget Earbuds">
+                                <div class="card-body">
+                                    <h5 class="card-title">Budget Earbuds</h5>
+                                    <p class="card-text">Affordable wireless earbuds with good quality.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$49.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1625948515291-69613efd103f?w=300&h=200&fit=crop" class="card-img-top" alt="Sport Earbuds">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sport Earbuds</h5>
+                                    <p class="card-text">Secure fit earbuds for active lifestyles.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$79.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="speakers">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1543512214-318c7553f230?w=300&h=200&fit=crop" class="card-img-top" alt="Smart Speaker">
+                                <div class="card-body">
+                                    <h5 class="card-title">Smart Speaker</h5>
+                                    <p class="card-text">Voice-controlled smart speaker with AI.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$129.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?w=300&h=200&fit=crop" class="card-img-top" alt="Bookshelf Speakers">
+                                <div class="card-body">
+                                    <h5 class="card-title">Bookshelf Speakers</h5>
+                                    <p class="card-text">High-fidelity bookshelf speakers.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$199.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=300&h=200&fit=crop" class="card-img-top" alt="Portable Speaker">
+                                <div class="card-body">
+                                    <h5 class="card-title">Portable Speaker</h5>
+                                    <p class="card-text">Waterproof portable speaker for outdoor use.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="text-primary fw-bold">$69.99</span>
+                                        <button class="btn btn-sm btn-primary">Add to Cart</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Draggable & Droppable Demo -->
+        <section class="widget-container">
+            <h3 class="widget-title">Drag Products to Compare</h3>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Available Products</h5>
+                    <p class="comparison-instruction">Drag up to 3 products to the comparison area below</p>
+                    <div id="draggable-products" class="d-flex flex-wrap justify-content-center mb-4">
+                        <div class="draggable-item ui-widget-content" data-product-id="1" 
+                             data-product-name="Premium Headphones" 
+                             data-product-price="$199.99"
+                             data-product-battery="30 hours"
+                             data-product-connectivity="Bluetooth 5.0"
+                             data-product-weight="250g"
+                             data-product-noise-cancel="Yes"
+                             data-product-warranty="2 Years">
+                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=100&h=100&fit=crop" alt="Headphones" width="80">
+                            <div class="product-name">Premium Headphones</div>
+                            <div class="product-price">$199.99</div>
+                        </div>
+                        <div class="draggable-item ui-widget-content" data-product-id="2"
+                             data-product-name="Wireless Earbuds"
+                             data-product-price="$129.99"
+                             data-product-battery="24 hours"
+                             data-product-connectivity="Bluetooth 5.2"
+                             data-product-weight="45g"
+                             data-product-noise-cancel="Yes"
+                             data-product-warranty="1 Year">
+                            <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=100&h=100&fit=crop" alt="Earbuds" width="80">
+                            <div class="product-name">Wireless Earbuds</div>
+                            <div class="product-price">$129.99</div>
+                        </div>
+                        <div class="draggable-item ui-widget-content" data-product-id="3"
+                             data-product-name="Bluetooth Speaker"
+                             data-product-price="$89.99"
+                             data-product-battery="20 hours"
+                             data-product-connectivity="Bluetooth 4.2"
+                             data-product-weight="500g"
+                             data-product-noise-cancel="No"
+                             data-product-warranty="1 Year">
+                            <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=100&h=100&fit=crop" alt="Speaker" width="80">
+                            <div class="product-name">Bluetooth Speaker</div>
+                            <div class="product-price">$89.99</div>
+                        </div>
+                        <div class="draggable-item ui-widget-content" data-product-id="4"
+                             data-product-name="Gaming Headset"
+                             data-product-price="$159.99"
+                             data-product-battery="25 hours"
+                             data-product-connectivity="USB + 3.5mm"
+                             data-product-weight="320g"
+                             data-product-noise-cancel="No"
+                             data-product-warranty="2 Years">
+                            <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=100&h=100&fit=crop" alt="Gaming Headset" width="80">
+                            <div class="product-name">Gaming Headset</div>
+                            <div class="product-price">$159.99</div>
+                        </div>
+                        <div class="draggable-item ui-widget-content" data-product-id="5"
+                             data-product-name="Smart Speaker"
+                             data-product-price="$129.99"
+                             data-product-battery="N/A (Plugged)"
+                             data-product-connectivity="Wi-Fi + Bluetooth"
+                             data-product-weight="780g"
+                             data-product-noise-cancel="No"
+                             data-product-warranty="1 Year">
+                            <img src="https://images.unsplash.com/photo-1543512214-318c7553f230?w=100&h=100&fit=crop" alt="Smart Speaker" width="80">
+                            <div class="product-name">Smart Speaker</div>
+                            <div class="product-price">$129.99</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Comparison Area</h5>
+                    <div id="droppable-compare" class="droppable-area">
+                        <p class="drop-instruction">Drag products here to compare (maximum 3 products)</p>
+                        <div id="compared-products" class="d-flex justify-content-center flex-wrap"></div>
+                    </div>
+                    
+                    <!-- Comparison Table -->
+                    <table id="comparison-table" class="table comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th class="product-col" id="product-col-1"></th>
+                                <th class="product-col" id="product-col-2"></th>
+                                <th class="product-col" id="product-col-3"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Price</strong></td>
+                                <td class="product-price-1"></td>
+                                <td class="product-price-2"></td>
+                                <td class="product-price-3"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Battery Life</strong></td>
+                                <td class="product-battery-1"></td>
+                                <td class="product-battery-2"></td>
+                                <td class="product-battery-3"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Connectivity</strong></td>
+                                <td class="product-connectivity-1"></td>
+                                <td class="product-connectivity-2"></td>
+                                <td class="product-connectivity-3"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Weight</strong></td>
+                                <td class="product-weight-1"></td>
+                                <td class="product-weight-2"></td>
+                                <td class="product-weight-3"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Noise Cancellation</strong></td>
+                                <td class="product-noise-cancel-1"></td>
+                                <td class="product-noise-cancel-2"></td>
+                                <td class="product-noise-cancel-3"></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Warranty</strong></td>
+                                <td class="product-warranty-1"></td>
+                                <td class="product-warranty-2"></td>
+                                <td class="product-warranty-3"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="text-center mt-3">
+                        <button id="clear-comparison" class="btn btn-warning" style="display: none;">
+                            <i class="fas fa-trash-alt me-2"></i>Clear Comparison
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resizable Demo -->
+        <section class="widget-container">
+            <h3 class="widget-title">Product Details (Resizable)</h3>
+            <div id="resizable-details" class="resizable-item ui-widget-content">
+                <h4>Product Specifications</h4>
+                <ul>
+                    <li>Driver Size: 40mm</li>
+                    <li>Frequency Response: 20Hz - 20kHz</li>
+                    <li>Impedance: 32 Ohms</li>
+                    <li>Sensitivity: 105dB</li>
+                    <li>Battery Life: 30 hours</li>
+                    <li>Charging Time: 2 hours</li>
+                    <li>Bluetooth Version: 5.0</li>
+                    <li>Weight: 250g</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Selectable Demo -->
+        <section class="widget-container">
+            <h3 class="widget-title">Select Features (Click to select)</h3>
+            <div id="selectable-features" class="selectable-container">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <div class="p-3 border rounded">Noise Cancellation</div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="p-3 border rounded">Wireless</div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="p-3 border rounded">Water Resistant</div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="p-3 border rounded">Voice Assistant</div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="p-3 border rounded">Quick Charge</div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="p-3 border rounded">Foldable Design</div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="p-3 border rounded">Multipoint Connection</div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="p-3 border rounded">Touch Controls</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <button id="get-selected" class="btn btn-primary">Get Selected Features</button>
+                <div id="selected-features" class="mt-2"></div>
+            </div>
+        </section>
+
+        <!-- Sortable Demo -->
+        <section class="widget-container">
+            <h3 class="widget-title">Reorder Your Wishlist (Drag to sort)</h3>
+            <ul id="sortable-wishlist" class="sortable-list">
+                <li class="ui-state-default">
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                    Premium Wireless Headphones
+                </li>
+                <li class="ui-state-default">
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                    True Wireless Earbuds
+                </li>
+                <li class="ui-state-default">
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                    Bluetooth Speaker
+                </li>
+                <li class="ui-state-default">
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                    Gaming Headset
+                </li>
+                <li class="ui-state-default">
+                    <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+                    Smart Speaker
+                </li>
+            </ul>
+            <div class="mt-3">
+                <button id="save-order" class="btn btn-primary">Save Order</button>
+            </div>
+        </section>
+
+        <!-- Shopping Cart -->
+        <section id="cart" class="cart-container">
+            <h3 class="widget-title">Shopping Cart</h3>
+            <div id="cart-items">
+                <div class="cart-item">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=80&h=80&fit=crop" alt="Premium Wireless Headphones" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">Premium Wireless Headphones</div>
+                        <div class="cart-item-price">$199.99</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <label for="cart-quantity-1">Qty:</label>
+                        <input id="cart-quantity-1" type="number" min="1" max="10" value="1" class="form-control form-control-sm" style="width: 70px; display: inline-block;">
+                    </div>
+                    <button class="btn btn-sm btn-danger ms-2">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="cart-item">
+                    <img src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=80&h=80&fit=crop" alt="True Wireless Earbuds" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">True Wireless Earbuds</div>
+                        <div class="cart-item-price">$129.99</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <label for="cart-quantity-2">Qty:</label>
+                        <input id="cart-quantity-2" type="number" min="1" max="10" value="1" class="form-control form-control-sm" style="width: 70px; display: inline-block;">
+                    </div>
+                    <button class="btn btn-sm btn-danger ms-2">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total">$329.98</span>
+            </div>
+            <button id="checkout-btn" class="checkout-btn">Proceed to Checkout</button>
+        </section>
+
+        <!-- Progress Bar Demo -->
+        <section class="widget-container">
+            <h3 class="widget-title">Order Progress</h3>
+            <div id="order-progress">
+                <div class="mb-3">
+                    <label for="order-progress-bar">Order Processing:</label>
+                    <div id="order-progress-bar"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="shipping-progress-bar">Shipping Progress:</label>
+                    <div id="shipping-progress-bar"></div>
+                </div>
+                <div class="mb-3">
+                    <button id="simulate-progress" class="btn btn-primary">Simulate Progress</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Date Picker Demo -->
+        <section class="widget-container">
+            <h3 class="widget-title">Delivery Date</h3>
+            <div class="mb-3">
+                <label for="delivery-date">Select Delivery Date:</label>
+                <input type="text" id="delivery-date" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="delivery-time">Delivery Time:</label>
+                <input type="text" id="delivery-time" class="form-control">
+            </div>
+        </section>
+
+        <!-- Spinner Demo -->
+        <section class="widget-container">
+            <h3 class="widget-title">Quantity Selector</h3>
+            <div class="mb-3">
+                <label for="spinner-quantity">Quantity:</label>
+                <input id="spinner-quantity" type="number" min="1" max="10" value="1">
+            </div>
+            <div class="mb-3">
+                <label for="spinner-price">Price:</label>
+                <input id="spinner-price" type="number" min="0" max="1000" step="0.01" value="199.99">
+            </div>
+        </section>
+    </div>
+
+    <!-- Product Details Dialog -->
+    <div id="product-dialog" title="Product Details">
+        <div id="dialog-content">
+            <p>Loading product details...</p>
+        </div>
+    </div>
+
+    <!-- Menu Demo -->
+    <div style="position: fixed; bottom: 20px; right: 20px;">
+        <button id="menu-button" class="btn btn-primary">
+            <i class="fas fa-bars"></i> Menu
+        </button>
+        <ul id="context-menu" style="display: none; position: absolute; z-index: 1000;">
+            <li><div>View Details</div></li>
+            <li><div>Add to Wishlist</div></li>
+            <li><div>Share Product</div></li>
+            <li><div>Report Issue</div></li>
+        </ul>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- jQuery UI -->
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(function() {
+            // Gallery images - Premium Headphones
+            const galleryImages = [
+                "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&h=500&fit=crop",  // Main headphones view
+                "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=800&h=500&fit=crop", // White headphones
+                "https://images.unsplash.com/photo-1545127398-14699f92334b?w=800&h=500&fit=crop",  // Headphones side view
+                "https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=800&h=500&fit=crop", // Headphones detail
+                "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=800&h=500&fit=crop"  // Headphones in use
+            ];
+            
+            let currentImageIndex = 0;
+            let slideshowInterval;
+            
+            // Initialize thumbnails
+            function initThumbnails() {
+                const $thumbnails = $("#thumbnails");
+                $thumbnails.empty();
+                
+                galleryImages.forEach((src, index) => {
+                    const $thumb = $(`<img src="${src}" class="thumbnail" alt="Thumbnail ${index + 1}">`);
+                    if (index === currentImageIndex) {
+                        $thumb.addClass("active");
+                    }
+                    $thumb.on("click", function() {
+                        currentImageIndex = index;
+                        updateMainImage();
+                        updateThumbnails();
+                        updateSlider();
+                    });
+                    $thumbnails.append($thumb);
+                });
+            }
+            
+            // Update main image
+            function updateMainImage() {
+                $("#main-image").attr("src", galleryImages[currentImageIndex]);
+                
+                // Add effect
+                $("#main-image").hide().fadeIn(500);
+            }
+            
+            // Update thumbnails
+            function updateThumbnails() {
+                $(".thumbnail").removeClass("active");
+                $(`.thumbnail:eq(${currentImageIndex})`).addClass("active");
+            }
+            
+            // Gallery navigation
+            $(".prev-btn").on("click", function() {
+                currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+                updateMainImage();
+                updateThumbnails();
+                updateSlider();
+            });
+            
+            $(".next-btn").on("click", function() {
+                currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+                updateMainImage();
+                updateThumbnails();
+                updateSlider();
+            });
+            
+            // Gallery slider
+            $("#gallery-slider").slider({
+                min: 0,
+                max: galleryImages.length - 1,
+                value: currentImageIndex,
+                slide: function(event, ui) {
+                    currentImageIndex = ui.value;
+                    updateMainImage();
+                    updateThumbnails();
+                }
+            });
+            
+            function updateSlider() {
+                $("#gallery-slider").slider("value", currentImageIndex);
+            }
+            
+            // Slideshow functionality
+            let isSlideshowPlaying = false;
+            $("#play-slideshow").on("click", function() {
+                if (isSlideshowPlaying) {
+                    clearInterval(slideshowInterval);
+                    $(this).html('<i class="fas fa-play me-1"></i> Slideshow');
+                    isSlideshowPlaying = false;
+                } else {
+                    slideshowInterval = setInterval(function() {
+                        currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+                        updateMainImage();
+                        updateThumbnails();
+                        updateSlider();
+                    }, 3000);
+                    $(this).html('<i class="fas fa-pause me-1"></i> Pause');
+                    isSlideshowPlaying = true;
+                }
+            });
+            
+            // Initialize gallery
+            initThumbnails();
+            
+            // Autocomplete
+            const products = [
+                "Premium Wireless Headphones",
+                "True Wireless Earbuds",
+                "Bluetooth Speaker",
+                "Gaming Headset",
+                "Smart Speaker",
+                "Studio Headphones",
+                "Sport Earbuds",
+                "Portable Speaker"
+            ];
+            
+            $("#product-search").autocomplete({
+                source: products,
+                minLength: 2,
+                select: function(event, ui) {
+                    // Show notification when product is selected
+                    $("<div>")
+                        .appendTo("body")
+                        .addClass("alert alert-success")
+                        .css({
+                            position: "fixed",
+                            top: "20px",
+                            right: "20px",
+                            zIndex: 9999
+                        })
+                        .text(`Selected: ${ui.item.value}`)
+                        .delay(3000)
+                        .fadeOut(function() {
+                            $(this).remove();
+                        });
+                }
+            });
+            
+            // Button
+            $("#add-to-cart-btn").button({
+                icon: "ui-icon-cart"
+            });
+            
+            // Checkboxradio
+            $("#color-option").checkboxradio();
+            $("#availability-filter").checkboxradio();
+            $("#category-filter").checkboxradio();
+            
+            // Controlgroup
+            $("#color-option").controlgroup();
+            $("#availability-filter").controlgroup();
+            $("#category-filter").controlgroup();
+            
+            // Datepicker
+            $("#delivery-date").datepicker({
+                minDate: 1,
+                maxDate: "+2w",
+                dateFormat: "mm/dd/yy"
+            });
+            
+            // Timepicker using spinner
+            $("#delivery-time").spinner({
+                min: 8,
+                max: 18,
+                step: 0.5,
+                start: function() {
+                    $(this).parent().addClass("ui-state-active");
+                },
+                stop: function() {
+                    $(this).parent().removeClass("ui-state-active");
+                }
+            });
+            
+            // Dialog
+            $("#product-dialog").dialog({
+                autoOpen: false,
+                modal: true,
+                width: 600,
+                buttons: {
+                    "Close": function() {
+                        $(this).dialog("close");
+                    },
+                    "Add to Cart": function() {
+                        $(this).dialog("close");
+                        // Show notification
+                        $("<div>")
+                            .appendTo("body")
+                            .addClass("alert alert-success")
+                            .css({
+                                position: "fixed",
+                                top: "20px",
+                                right: "20px",
+                                zIndex: 9999
+                            })
+                            .text("Product added to cart!")
+                            .delay(3000)
+                            .fadeOut(function() {
+                                $(this).remove();
+                            });
+                    }
+                }
+            });
+            
+            // Open dialog when product image is clicked
+            $("#main-image").on("click", function() {
+                $("#dialog-content").html(`
+                    <h3>Premium Wireless Headphones</h3>
+                    <img src="${$(this).attr("src")}" style="width: 100%; border-radius: 5px; margin-bottom: 15px;">
+                    <p>Experience crystal-clear sound with our premium wireless headphones. Featuring active noise cancellation, 30-hour battery life, and comfortable over-ear design. Perfect for music lovers, travelers, and professionals.</p>
+                    <h4>Key Features:</h4>
+                    <ul>
+                        <li>Active Noise Cancellation</li>
+                        <li>30-hour battery life</li>
+                        <li>Comfortable over-ear design</li>
+                        <li>Bluetooth 5.0 connectivity</li>
+                        <li>Quick charge (5 min = 2 hours playback)</li>
+                        <li>Foldable design with carrying case</li>
+                    </ul>
+                `);
+                $("#product-dialog").dialog("open");
+            });
+            
+            // Menu
+            $("#context-menu").menu({
+                select: function(event, ui) {
+                    const item = ui.item.text();
+                    
+                    // Show notification
+                    $("<div>")
+                        .appendTo("body")
+                        .addClass("alert alert-info")
+                        .css({
+                            position: "fixed",
+                            top: "20px",
+                            right: "20px",
+                            zIndex: 9999
+                        })
+                        .text(`Action: ${item}`)
+                        .delay(3000)
+                        .fadeOut(function() {
+                            $(this).remove();
+                        });
+                    
+                    // Hide menu
+                    $("#context-menu").hide();
+                }
+            });
+            
+            $("#menu-button").on("click", function(e) {
+                e.preventDefault();
+                const menu = $("#context-menu");
+                menu.css({
+                    top: $(this).position().top + $(this).outerHeight(),
+                    left: $(this).position().left - menu.outerWidth() + $(this).outerWidth()
+                }).show();
+            });
+            
+            // Hide menu when clicking outside
+            $(document).on("click", function(e) {
+                if (!$(e.target).closest("#menu-button, #context-menu").length) {
+                    $("#context-menu").hide();
+                }
+            });
+            
+            // Progressbar
+            $("#order-progress-bar").progressbar({
+                value: 37
+            });
+            
+            $("#shipping-progress-bar").progressbar({
+                value: 15
+            });
+            
+            // Simulate progress
+            $("#simulate-progress").on("click", function() {
+                let orderValue = 37;
+                let shippingValue = 15;
+                
+                const orderInterval = setInterval(function() {
+                    orderValue += 1;
+                    $("#order-progress-bar").progressbar("value", orderValue);
+                    
+                    if (orderValue >= 100) {
+                        clearInterval(orderInterval);
+                        
+                        // Start shipping progress
+                        const shippingInterval = setInterval(function() {
+                            shippingValue += 1;
+                            $("#shipping-progress-bar").progressbar("value", shippingValue);
+                            
+                            if (shippingValue >= 100) {
+                                clearInterval(shippingInterval);
+                                
+                                // Show completion message
+                                $("<div>")
+                                    .appendTo("body")
+                                    .addClass("alert alert-success")
+                                    .css({
+                                        position: "fixed",
+                                        top: "20px",
+                                        right: "20px",
+                                        zIndex: 9999
+                                    })
+                                    .text("Order completed and shipped!")
+                                    .delay(3000)
+                                    .fadeOut(function() {
+                                        $(this).remove();
+                                    });
+                            }
+                        }, 50);
+                    }
+                }, 50);
+            });
+            
+            // Selectmenu
+            $("#sort-products").selectmenu();
+            $("#warranty-option").selectmenu();
+            
+            // Slider (price range)
+            $("#price-slider").slider({
+                range: true,
+                min: 50,
+                max: 500,
+                values: [50, 500],
+                slide: function(event, ui) {
+                    $("#min-price").text(ui.values[0]);
+                    $("#max-price").text(ui.values[1]);
+                }
+            });
+            
+            // Spinner
+            $("#quantity").spinner({
+                min: 1,
+                max: 10,
+                spin: function(event, ui) {
+                    // Update price based on quantity
+                    const basePrice = 199.99;
+                    const totalPrice = (basePrice * ui.value).toFixed(2);
+                    $(".product-price").text(`$${totalPrice}`);
+                }
+            });
+            
+            $("#spinner-quantity").spinner({
+                min: 1,
+                max: 10
+            });
+            
+            $("#spinner-price").spinner({
+                min: 0,
+                max: 1000,
+                step: 0.01,
+                numberFormat: "C"
+            });
+            
+            // Tabs
+            $("#product-tabs").tabs();
+            
+            // Draggable
+            $("#draggable-products .draggable-item").draggable({
+                helper: "clone",
+                revert: "invalid",
+                cursor: "move",
+                opacity: 0.7,
+                zIndex: 1000
+            });
+            
+            // Comparison functionality
+            let comparedProducts = [];
+            const maxCompareItems = 3;
+            
+            function updateComparisonTable() {
+                // Clear table first
+                $('.comparison-table th.product-col').html('');
+                $('.comparison-table tbody td[class^="product-"]').html('');
+                
+                if (comparedProducts.length === 0) {
+                    $('#comparison-table').removeClass('show');
+                    $('#clear-comparison').hide();
+                    $('.drop-instruction').show();
+                    return;
+                }
+                
+                $('.drop-instruction').hide();
+                $('#comparison-table').addClass('show');
+                $('#clear-comparison').show();
+                
+                // Populate table with product data
+                comparedProducts.forEach((product, index) => {
+                    const colIndex = index + 1;
+                    
+                    // Add product header with image and name
+                    $(`#product-col-${colIndex}`).html(`
+                        <img src="${product.image}" alt="${product.name}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px;">
+                        <div class="mt-2"><strong>${product.name}</strong></div>
+                        <button class="btn btn-sm btn-danger remove-btn" data-product-id="${product.id}">
+                            <i class="fas fa-times"></i> Remove
+                        </button>
+                    `);
+                    
+                    // Add product details
+                    $(`.product-price-${colIndex}`).html(`<span class="text-primary fw-bold">${product.price}</span>`);
+                    $(`.product-battery-${colIndex}`).text(product.battery);
+                    $(`.product-connectivity-${colIndex}`).text(product.connectivity);
+                    $(`.product-weight-${colIndex}`).text(product.weight);
+                    $(`.product-noise-cancel-${colIndex}`).html(
+                        product.noiseCancel === 'Yes' 
+                            ? '<span class="badge bg-success">Yes</span>' 
+                            : '<span class="badge bg-secondary">No</span>'
+                    );
+                    $(`.product-warranty-${colIndex}`).text(product.warranty);
+                });
+                
+                // Add remove button functionality
+                $('.remove-btn').off('click').on('click', function() {
+                    const productId = $(this).data('product-id');
+                    removeFromComparison(productId);
+                });
+            }
+            
+            function addToComparison(productData) {
+                // Check if product already exists
+                if (comparedProducts.find(p => p.id === productData.id)) {
+                    showNotification('Product already in comparison!', 'warning');
+                    return false;
+                }
+                
+                // Check max items
+                if (comparedProducts.length >= maxCompareItems) {
+                    showNotification(`Maximum ${maxCompareItems} products can be compared!`, 'warning');
+                    return false;
+                }
+                
+                comparedProducts.push(productData);
+                updateComparisonTable();
+                showNotification('Product added to comparison!', 'success');
+                return true;
+            }
+            
+            function removeFromComparison(productId) {
+                comparedProducts = comparedProducts.filter(p => p.id !== productId);
+                
+                // Remove visual item from drop area
+                $(`.compared-item[data-product-id="${productId}"]`).fadeOut(300, function() {
+                    $(this).remove();
+                });
+                
+                updateComparisonTable();
+                showNotification('Product removed from comparison!', 'info');
+            }
+            
+            function showNotification(message, type) {
+                const alertClass = type === 'success' ? 'alert-success' : 
+                                  type === 'warning' ? 'alert-warning' : 'alert-info';
+                
+                $("<div>")
+                    .appendTo("body")
+                    .addClass(`alert ${alertClass}`)
+                    .css({
+                        position: "fixed",
+                        top: "20px",
+                        right: "20px",
+                        zIndex: 9999
+                    })
+                    .text(message)
+                    .delay(3000)
+                    .fadeOut(function() {
+                        $(this).remove();
+                    });
+            }
+            
+            // Droppable
+            $("#droppable-compare").droppable({
+                accept: ".draggable-item",
+                classes: {
+                    "ui-droppable-active": "active",
+                    "ui-droppable-hover": "ui-state-hover"
+                },
+                drop: function(event, ui) {
+                    const $draggedItem = ui.draggable;
+                    
+                    // Extract product data
+                    const productData = {
+                        id: $draggedItem.data('product-id'),
+                        name: $draggedItem.data('product-name'),
+                        price: $draggedItem.data('product-price'),
+                        battery: $draggedItem.data('product-battery'),
+                        connectivity: $draggedItem.data('product-connectivity'),
+                        weight: $draggedItem.data('product-weight'),
+                        noiseCancel: $draggedItem.data('product-noise-cancel'),
+                        warranty: $draggedItem.data('product-warranty'),
+                        image: $draggedItem.find('img').attr('src')
+                    };
+                    
+                    // Add to comparison
+                    if (addToComparison(productData)) {
+                        // Create visual representation in drop area
+                        const $item = $(`
+                            <div class="compared-item draggable-item" data-product-id="${productData.id}">
+                                <img src="${productData.image}" alt="${productData.name}" width="80">
+                                <div class="product-name">${productData.name}</div>
+                                <div class="product-price">${productData.price}</div>
+                                <button class="btn btn-sm btn-danger mt-2" onclick="removeFromComparison('${productData.id}')">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        `);
+                        
+                        // Add to comparison area
+                        $("#compared-products").append($item);
+                        
+                        // Animate entry
+                        $item.hide().fadeIn(300);
+                        
+                        // Remove item when button is clicked
+                        $item.find("button").on("click", function() {
+                            removeFromComparison(productData.id);
+                        });
+                    }
+                }
+            });
+            
+            // Clear comparison button
+            $('#clear-comparison').on('click', function() {
+                comparedProducts = [];
+                $('#compared-products').empty();
+                updateComparisonTable();
+                showNotification('Comparison cleared!', 'info');
+            });
+            
+            // Resizable
+            $("#resizable-details").resizable({
+                minWidth: 200,
+                minHeight: 200,
+                maxWidth: 800,
+                maxHeight: 600,
+                alsoResize: "#resizable-details ul"
+            });
+            
+            // Selectable
+            $("#selectable-features").selectable({
+                stop: function() {
+                    const selected = [];
+                    $(".ui-selected", this).each(function() {
+                        selected.push($(this).text());
+                    });
+                    $("#selected-features").text("Selected: " + selected.join(", "));
+                }
+            });
+            
+            $("#get-selected").on("click", function() {
+                const selected = [];
+                $(".ui-selected", "#selectable-features").each(function() {
+                    selected.push($(this).text());
+                });
+                
+                if (selected.length > 0) {
+                    $("<div>")
+                        .appendTo("body")
+                        .addClass("alert alert-info")
+                        .css({
+                            position: "fixed",
+                            top: "20px",
+                            right: "20px",
+                            zIndex: 9999
+                        })
+                        .text("Selected features: " + selected.join(", "))
+                        .delay(3000)
+                        .fadeOut(function() {
+                            $(this).remove();
+                        });
+                } else {
+                    $("<div>")
+                        .appendTo("body")
+                        .addClass("alert alert-warning")
+                        .css({
+                            position: "fixed",
+                            top: "20px",
+                            right: "20px",
+                            zIndex: 9999
+                        })
+                        .text("No features selected")
+                        .delay(3000)
+                        .fadeOut(function() {
+                            $(this).remove();
+                        });
+                }
+            });
+            
+            // Sortable
+            $("#sortable-wishlist").sortable({
+                placeholder: "ui-state-highlight",
+                update: function(event, ui) {
+                    // Show notification
+                    $("<div>")
+                        .appendTo("body")
+                        .addClass("alert alert-info")
+                        .css({
+                            position: "fixed",
+                            top: "20px",
+                            right: "20px",
+                            zIndex: 9999
+                        })
+                        .text("Wishlist order updated!")
+                        .delay(3000)
+                        .fadeOut(function() {
+                            $(this).remove();
+                        });
+                }
+            });
+            
+            $("#sortable-wishlist").disableSelection();
+            
+            $("#save-order").on("click", function() {
+                const order = [];
+                $("#sortable-wishlist li").each(function() {
+                    order.push($(this).text().trim());
+                });
+                
+                // Show notification
+                $("<div>")
+                    .appendTo("body")
+                    .addClass("alert alert-success")
+                    .css({
+                        position: "fixed",
+                        top: "20px",
+                        right: "20px",
+                        zIndex: 9999
+                    })
+                    .text("Wishlist order saved!")
+                    .delay(3000)
+                    .fadeOut(function() {
+                        $(this).remove();
+                    });
+            });
+            
+            // Effects demonstrations
+            $("#checkout-btn").on("click", function() {
+                // Add effect to button
+                $(this).effect("highlight", {color: "#e74c3c"}, 1000);
+                
+                // Show dialog
+                setTimeout(function() {
+                    $("#dialog-content").html(`
+                        <h3>Checkout</h3>
+                        <p>Please review your order before proceeding.</p>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Premium Wireless Headphones</td>
+                                        <td>1</td>
+                                        <td>$199.99</td>
+                                    </tr>
+                                    <tr>
+                                        <td>True Wireless Earbuds</td>
+                                        <td>1</td>
+                                        <td>$129.99</td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">Total</th>
+                                        <th>$329.98</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    `);
+                    $("#product-dialog").dialog("open");
+                }, 1000);
+            });
+            
+            // Add to cart animation
+            $("#add-to-cart-btn").on("click", function() {
+                const $cart = $("#cart");
+                const $cartIcon = $(this).find("i");
+                
+                // Clone the icon
+                const $clone = $cartIcon.clone()
+                    .css({
+                        position: "absolute",
+                        top: $cartIcon.offset().top,
+                        left: $cartIcon.offset().left,
+                        zIndex: 1000
+                    })
+                    .appendTo("body");
+                
+                // Animate to cart
+                $clone.animate({
+                    top: $cart.offset().top,
+                    left: $cart.offset().left + $cart.width() / 2,
+                    width: 20,
+                    height: 20,
+                    opacity: 0.5
+                }, 800, function() {
+                    $clone.remove();
+                    
+                    // Show notification
+                    $("<div>")
+                        .appendTo("body")
+                        .addClass("alert alert-success")
+                        .css({
+                            position: "fixed",
+                            top: "20px",
+                            right: "20px",
+                            zIndex: 9999
+                        })
+                        .text("Product added to cart!")
+                        .delay(3000)
+                        .fadeOut(function() {
+                            $(this).remove();
+                        });
+                });
+            });
+            
+            // Color animation effect
+            $(".product-title").on("click", function() {
+                $(this).animate({
+                    color: "#e74c3c"
+                }, 500).animate({
+                    color: "#3498db"
+                }, 500).animate({
+                    color: "#2ecc71"
+                }, 500).animate({
+                    color: "#34495e"
+                }, 500);
+            });
+            
+            // Easing demonstration
+            $(".product-description").on("click", function() {
+                $(this).slideUp(500, "easeOutBounce").slideDown(500, "easeOutBounce");
+            });
+            
+            // Hide/Show effect
+            $(".widget-title").on("dblclick", function() {
+                const $content = $(this).next();
+                if ($content.is(":visible")) {
+                    $content.hide("blind", 500);
+                } else {
+                    $content.show("blind", 500);
+                }
+            });
+            
+            // Add/Remove class effect
+            $(".feature-icon").on("click", function() {
+                $(this).toggleClass("highlight");
+            });
+            
+            // Toggle class effect
+            $(".card").on("mouseenter", function() {
+                $(this).toggleClass("shadow-lg", 300);
+            }).on("mouseleave", function() {
+                $(this).toggleClass("shadow-lg", 300);
+            });
+            
+            // Initialize quantity spinner
+            $(".cart-item-quantity input").spinner({
+                min: 1,
+                max: 10,
+                spin: function(event, ui) {
+                    // Update cart total
+                    updateCartTotal();
+                }
+            });
+            
+            // Update cart total
+            function updateCartTotal() {
+                let total = 0;
+                $(".cart-item").each(function() {
+                    const price = parseFloat($(this).find(".cart-item-price").text().replace("$", ""));
+                    const quantity = parseInt($(this).find(".cart-item-quantity input").val());
+                    total += price * quantity;
+                });
+                $("#cart-total").text(`$${total.toFixed(2)}`);
+            }
+            
+            // Remove cart item
+            $(".cart-item button").on("click", function() {
+                const $item = $(this).closest(".cart-item");
+                $item.fadeOut(500, function() {
+                    $(this).remove();
+                    updateCartTotal();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Gallery - jQuery Image Slider</title>
+    
+    <!-- jQuery UI CSS -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/ui-lightness/jquery-ui.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="gallery-styles.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-camera"></i> Product Gallery</h1>
+            <p>Discover our amazing collection of products</p>
+        </header>
+
+        <div class="gallery-container">
+            <!-- Main Gallery Display -->
+            <div class="main-gallery">
+                <div class="gallery-wrapper">
+                    <!-- Navigation Arrows -->
+                    <button class="nav-btn prev-btn" id="prevBtn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <!-- Main Image Container -->
+                    <div class="image-display">
+                        <div class="image-container">
+                            <img src="https://via.placeholder.com/800x500/FF6B6B/FFFFFF?text=Premium+Headphones" 
+                                 alt="Premium Headphones" 
+                                 class="main-image active" 
+                                 data-index="0">
+                            <img src="https://via.placeholder.com/800x500/4ECDC4/FFFFFF?text=Smart+Watch" 
+                                 alt="Smart Watch" 
+                                 class="main-image" 
+                                 data-index="1">
+                            <img src="https://via.placeholder.com/800x500/45B7D1/FFFFFF?text=Wireless+Speaker" 
+                                 alt="Wireless Speaker" 
+                                 class="main-image" 
+                                 data-index="2">
+                            <img src="https://via.placeholder.com/800x500/96CEB4/FFFFFF?text=Gaming+Mouse" 
+                                 alt="Gaming Mouse" 
+                                 class="main-image" 
+                                 data-index="3">
+                            <img src="https://via.placeholder.com/800x500/FECA57/FFFFFF?text=Tablet+Pro" 
+                                 alt="Tablet Pro" 
+                                 class="main-image" 
+                                 data-index="4">
+                        </div>
+                        
+                        <!-- Product Info Overlay -->
+                        <div class="product-info">
+                            <div class="info-content">
+                                <h3 class="product-title">Premium Headphones</h3>
+                                <p class="product-description">High-quality wireless headphones with noise cancellation</p>
+                                <div class="product-price">$299.99</div>
+                                <button class="btn-primary">Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Arrows -->
+                    <button class="nav-btn next-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Gallery Controls -->
+                <div class="gallery-controls">
+                    <button class="control-btn" id="playPauseBtn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressBar"></div>
+                    </div>
+                    <div class="slide-counter">
+                        <span id="currentSlide">1</span> / <span id="totalSlides">5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thumbnail Navigation -->
+            <div class="thumbnail-container">
+                <h4><i class="fas fa-images"></i> Gallery</h4>
+                <div class="thumbnails">
+                    <div class="thumbnail active" data-index="0">
+                        <img src="https://via.placeholder.com/100x100/FF6B6B/FFFFFF?text=1" alt="Headphones">
+                        <div class="thumbnail-overlay">
+                            <span>Premium Headphones</span>
+                        </div>
+                    </div>
+                    <div class="thumbnail" data-index="1">
+                        <img src="https://via.placeholder.com/100x100/4ECDC4/FFFFFF?text=2" alt="Smart Watch">
+                        <div class="thumbnail-overlay">
+                            <span>Smart Watch</span>
+                        </div>
+                    </div>
+                    <div class="thumbnail" data-index="2">
+                        <img src="https://via.placeholder.com/100x100/45B7D1/FFFFFF?text=3" alt="Wireless Speaker">
+                        <div class="thumbnail-overlay">
+                            <span>Wireless Speaker</span>
+                        </div>
+                    </div>
+                    <div class="thumbnail" data-index="3">
+                        <img src="https://via.placeholder.com/100x100/96CEB4/FFFFFF?text=4" alt="Gaming Mouse">
+                        <div class="thumbnail-overlay">
+                            <span>Gaming Mouse</span>
+                        </div>
+                    </div>
+                    <div class="thumbnail" data-index="4">
+                        <img src="https://via.placeholder.com/100x100/FECA57/FFFFFF?text=5" alt="Tablet Pro">
+                        <div class="thumbnail-overlay">
+                            <span>Tablet Pro</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gallery Settings Panel -->
+            <div class="settings-panel">
+                <h4><i class="fas fa-cog"></i> Settings</h4>
+                <div class="setting-group">
+                    <label for="autoplaySpeed">Autoplay Speed:</label>
+                    <div class="slider-container">
+                        <div id="autoplaySpeed" class="speed-slider"></div>
+                        <span class="speed-value">3s</span>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="enableAutoplay" checked>
+                        Enable Autoplay
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label>
+                        <input type="checkbox" id="showThumbnails" checked>
+                        Show Thumbnails
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Information Cards -->
+        <div class="product-cards" id="productCards">
+            <div class="product-card active" data-index="0">
+                <h3>Premium Headphones</h3>
+                <p>Experience crystal-clear audio with our premium wireless headphones featuring advanced noise cancellation technology.</p>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> 30-hour battery life</li>
+                    <li><i class="fas fa-check"></i> Active noise cancellation</li>
+                    <li><i class="fas fa-check"></i> Premium materials</li>
+                </ul>
+                <div class="price">$299.99</div>
+            </div>
+            <div class="product-card" data-index="1">
+                <h3>Smart Watch</h3>
+                <p>Stay connected and track your fitness with our advanced smartwatch featuring health monitoring and smart notifications.</p>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> Health tracking</li>
+                    <li><i class="fas fa-check"></i> Waterproof design</li>
+                    <li><i class="fas fa-check"></i> Smart notifications</li>
+                </ul>
+                <div class="price">$399.99</div>
+            </div>
+            <div class="product-card" data-index="2">
+                <h3>Wireless Speaker</h3>
+                <p>Enjoy powerful, room-filling sound with our portable wireless speaker featuring 360-degree audio technology.</p>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> 360-degree sound</li>
+                    <li><i class="fas fa-check"></i> Portable design</li>
+                    <li><i class="fas fa-check"></i> Long battery life</li>
+                </ul>
+                <div class="price">$199.99</div>
+            </div>
+            <div class="product-card" data-index="3">
+                <h3>Gaming Mouse</h3>
+                <p>Dominate your games with our precision gaming mouse featuring customizable RGB lighting and high-DPI sensor.</p>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> High-precision sensor</li>
+                    <li><i class="fas fa-check"></i> RGB lighting</li>
+                    <li><i class="fas fa-check"></i> Ergonomic design</li>
+                </ul>
+                <div class="price">$79.99</div>
+            </div>
+            <div class="product-card" data-index="4">
+                <h3>Tablet Pro</h3>
+                <p>Unleash your creativity with our professional tablet featuring pressure-sensitive stylus and stunning display.</p>
+                <ul class="features">
+                    <li><i class="fas fa-check"></i> 4K display</li>
+                    <li><i class="fas fa-check"></i> Pressure-sensitive stylus</li>
+                    <li><i class="fas fa-check"></i> All-day battery</li>
+                </ul>
+                <div class="price">$899.99</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery and jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script src="gallery-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,276 @@
+---
+title: "Covid19"
+output: word_document
+---
+
+```{r}
+# Part A: Dataset Understanding and Preparation
+# 1. Import the COVID-19 dataset
+library(dplyr)
+
+covid <- read.csv(
+  "https://raw.githubusercontent.com/datasets/covid-19/main/data/countries-aggregated.csv"
+)
+
+# View dataset structure
+str(covid)
+```
+
+```{r}
+# 2. Display first 10 and last 10 records
+head(covid, 10)
+tail(covid, 10)
+```
+
+```{r}
+# 3. Identify total rows and columns
+total_rows <- nrow(covid)
+total_columns <- ncol(covid)
+
+total_rows
+total_columns
+```
+
+```{r}
+# 4. List variables and data types
+sapply(covid, class)
+```
+
+```{r}
+# 5. Convert Date column into Date format
+covid$Date <- as.Date(covid$Date, format = "%Y-%m-%d")
+```
+
+```{r}
+# 6. Healthcare significance of variables
+# Confirmed: Total reported COVID-19 cases
+# Recovered: Number of patients who recovered
+# Deaths: Total deaths caused by COVID-19
+```
+
+```{r}
+# Part B: Data Cleaning and Preprocessing
+# 1. Check for missing (NA) values
+colSums(is.na(covid))
+```
+
+```{r}
+# 2. Handle missing values
+covid$Confirmed[is.na(covid$Confirmed)] <- 0
+covid$Recovered[is.na(covid$Recovered)] <- 0
+covid$Deaths[is.na(covid$Deaths)] <- 0
+```
+
+```{r}
+# 3. Detect outliers using IQR method
+detect_outliers <- function(x) {
+  Q1 <- quantile(x, 0.25)
+  Q3 <- quantile(x, 0.75)
+  IQR <- Q3 - Q1
+  which(x < (Q1 - 1.5 * IQR) | x > (Q3 + 1.5 * IQR))
+}
+
+out_confirmed <- detect_outliers(covid$Confirmed)
+out_recovered <- detect_outliers(covid$Recovered)
+out_deaths <- detect_outliers(covid$Deaths)
+
+length(out_confirmed)
+length(out_recovered)
+length(out_deaths)
+```
+
+```{r}
+# 4. Handle outliers (capping method)
+cap_outliers <- function(x) {
+  Q1 <- quantile(x, 0.25)
+  Q3 <- quantile(x, 0.75)
+  IQR <- Q3 - Q1
+  lower <- Q1 - 1.5 * IQR
+  upper <- Q3 + 1.5 * IQR
+  x[x < lower] <- lower
+  x[x > upper] <- upper
+  return(x)
+}
+
+covid$Confirmed <- cap_outliers(covid$Confirmed)
+covid$Recovered <- cap_outliers(covid$Recovered)
+covid$Deaths <- cap_outliers(covid$Deaths)
+```
+
+```{r}
+# 5. Create cleaned dataset
+covid_clean <- covid
+```
+
+```{r}
+# Part C: Data Manipulation
+# 1. Filter dataset for a specific country
+india_data <- covid_clean %>%
+  filter(Country == "India")
+head(india_data,10)
+```
+
+```{r}
+# 2. Extract data for year 2020
+data_2020 <- covid_clean %>%
+  filter(format(Date, "%Y") == "2020")
+head(data_2020,10)
+```
+
+```{r}
+# 3. Create new column: Active_Cases
+covid_clean <- covid_clean %>%
+  mutate(Active_Cases = Confirmed - Recovered - Deaths)
+head(covid_clean, 10)
+```
+
+```{r}
+# 4. Group by country and calculate totals
+country_summary <- covid_clean %>%
+  group_by(Country) %>%
+  summarise(
+    Total_Confirmed = max(Confirmed),
+    Total_Deaths = max(Deaths),
+    Total_Recovered = max(Recovered)
+  )
+head(country_summary, 10)
+```
+
+```{r}
+# 5. Top 10 countries with highest confirmed cases
+top_10_countries <- country_summary %>%
+  arrange(desc(Total_Confirmed)) %>%
+  head(10)
+
+top_10_countries
+```
+
+```{r}
+# Part D:Data Visualization (Using ggplot2)
+library(ggplot2)
+
+# 1. Scatter Plot
+# Relationship between Confirmed Cases and Deaths
+ggplot(covid_clean,
+       aes(x = Confirmed, y = Deaths)) +
+  geom_point(color = "darkred", alpha = 0.5) +
+  labs(
+    title = "Confirmed COVID-19 Cases vs Deaths (Country-wise)",
+    x = "Total Confirmed Cases (log scale)",
+    y = "Total Deaths (log scale)"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# 2. Line Charts
+# a) Trend of confirmed cases over time for a selected country (India)
+india_data <- covid_clean %>% filter(Country == "India")
+
+ggplot(india_data, aes(x = Date, y = Confirmed)) +
+  geom_line(color = "blue") +
+  labs(
+    title = "COVID-19 Confirmed Cases Over Time (India)",
+    x = "Date",
+    y = "Confirmed Cases"
+  ) +
+  theme_minimal()
+
+# b) Compare confirmed cases for three countries
+countries_data <- covid_clean %>%
+  filter(Country %in% c("India", "United States", "Brazil"))
+
+ggplot(countries_data, aes(x = Date, y = Confirmed, color = Country)) +
+  geom_line() +
+  labs(
+    title = "Comparison of Confirmed COVID-19 Cases",
+    x = "Date",
+    y = "Confirmed Cases"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# 3. Bar Charts
+# a) Vertical bar chart – Top 10 countries by total deaths
+ top_deaths <- covid_clean %>%
+   group_by(Country) %>%
+   summarise(Total_Deaths = as.numeric(sum(Deaths))) %>%
+   arrange(desc(Total_Deaths)) %>%
+   slice_head(n = 10)
+ 
+ ggplot(top_deaths, aes(x = reorder(Country, -Total_Deaths), y = Total_Deaths)) +
+   geom_bar(stat = "identity", fill = "darkred") +
+   #scale_x_log10(labels = scales::comma) +
+   labs(
+     title = "Top 10 Countries by Total COVID-19 Deaths",
+    x = "Country",
+    y = "Total Deaths"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+ 
+ # b) Horizontal bar chart – Recovered cases by country (Top 10)
+ top_recovered <- covid_clean %>%
+  group_by(Country) %>%
+  summarise(Total_Recovered = as.numeric(sum(Recovered))) %>%
+  arrange(desc(Total_Recovered)) %>%
+  slice_head(n = 10)
+
+ggplot(top_recovered, aes(x = Total_Recovered, y = reorder(Country, Total_Recovered))) +
+  geom_bar(stat = "identity", fill = "darkgreen") +
+  labs(
+    title = "Top 10 Countries by Recovered COVID-19 Cases",
+    x = "Recovered Cases",
+    y = "Country"
+  ) +
+   scale_x_continuous(labels = scales::comma) +
+  theme_minimal()
+```
+
+```{r}
+# 4. Histograms
+# a) Histogram of Confirmed Cases
+ggplot(covid_clean, aes(x = log10(Confirmed + 1))) +
+  geom_histogram(fill = "steelblue", bins = 30) +
+  labs(
+    title = "Log-Transformed Distribution of Confirmed COVID-19 Cases",
+    x = "log10(Confirmed + 1)",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+```
+
+`{b) Interpret the histogram in terms of healthcare impact.`
+
+`Healthcare Interpretation: The histogram shows a right-skewed distribution, indicating that most countries have low to moderate case counts, while a few countries experience extremely high case loads, stressing healthcare infrastructure.}`
+
+```{r}
+# 5. Box Plots
+# a) Box plot for Confirmed Cases
+
+library(tidyr)
+library(dplyr)
+
+covid_long <- covid_clean %>%
+  select(Confirmed, Deaths) %>%
+  pivot_longer(
+    cols = c(Confirmed, Deaths),
+    names_to = "Type",
+    values_to = "Count"
+  )
+
+ggplot(covid_long, aes(x = Type, y = log10(Count + 1), fill = Type)) +
+  geom_boxplot(alpha = 0.7, outlier.color = "red") +
+  labs(
+    title = "COVID-19 Cases vs Deaths (log10(x + 1))",
+    y = "log10(Count + 1)",
+    x = NULL
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.position = "none"
+  )
+```

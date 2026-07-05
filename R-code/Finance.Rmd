@@ -1,0 +1,309 @@
+---
+---
+---
+
+```{r}
+# Part A: Dataset Loading and Understanding
+# 1. Load Required Libraries and Dataset
+
+library(ggplot2)
+library(dplyr)
+
+data("economics")
+```
+
+```{r}
+# 2. Structure and Summary Statistics
+str(economics)
+summary(economics)
+```
+
+Explanation of Important Variables:
+
+date The date variable represents the time at which each economic observation was recorded. It is crucial for time-series analysis as it allows us to study trends, patterns, and changes in economic indicators over a period of time, such as growth, recession, or recovery phases.
+
+unemploy The unemploy variable indicates the total number of unemployed individuals in the United States for a given date. It is a key indicator of economic health, as higher unemployment generally reflects economic slowdown, while lower unemployment suggests economic stability and growth.
+
+pce (Personal Consumption Expenditure) The pce variable measures the total amount spent by consumers on goods and services. It is an important indicator of consumer behavior and economic activity, as increased consumption usually signals higher confidence in the economy.
+
+pop (Population) The pop variable represents the total population size at each time point. It is significant for normalization and comparative analysis, helping analysts understand economic measures like unemployment or consumption relative to population growth.
+
+psavert (Personal Savings Rate) The psavert variable shows the percentage of personal income saved by individuals. It reflects financial stability and consumer confidence, where higher savings may indicate cautious spending behavior, while lower savings may suggest higher consumption.
+
+```{r}
+# 4. Data Types and Date Conversion
+class(economics$date)
+economics$date <- as.Date(economics$date)
+```
+
+```{r}
+# 5. Missing Value Check
+colSums(is.na(economics))
+```
+
+```{r}
+# Part B: Basic Time-Series Visualizations
+# 1. Line Plot: Unemployment Over Time
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line(color = "steelblue", size = 1) +
+  labs(
+    title = "Unemployment Trend in the United States",
+    x = "Year",
+    y = "Number of Unemployed"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# 2. Comparison: Unemployment vs Personal Consumption
+ggplot(economics, aes(x = date)) +
+  geom_line(aes(y = unemploy, color = "Unemployment"), size = 1) +
+  geom_line(aes(y = pce / 1000, color = "PCE (scaled)"), size = 1) +
+  labs(
+    title = "Unemployment vs Personal Consumption Expenditure",
+    x = "Year",
+    y = "Value (Scaled)",
+    color = "Indicator"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Part C: Aesthetics and Geometries
+# 1. Scatter Plot: Unemployment vs PCE
+ggplot(economics, aes(x = unemploy, y = pce)) +
+  geom_point(
+    aes(color = pop, size = psavert),
+    alpha = 0.6
+  ) +
+  scale_color_viridis_c() +
+  labs(
+    title = "Unemployment vs Personal Consumption",
+    x = "Unemployed Population",
+    y = "Personal Consumption Expenditure",
+    color = "Population",
+    size = "Savings Rate"
+  ) +
+  theme_minimal()
+
+```
+
+```{r}
+# 2. Multiple Geometries for Unemployment Trend
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "red", size = 1) +
+  geom_area(fill = "lightblue", alpha = 0.3) +
+  labs(
+    title = "Unemployment Trend Using Multiple Geometries",
+    x = "Year",
+    y = "Unemployment"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# 3. Highlight High Unemployment Periods
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line(aes(color = unemploy > 10000), size = 1) +
+  scale_color_manual(
+    values = c("FALSE" = "darkgreen", "TRUE" = "red"),
+    labels = c("Normal", "High Unemployment")
+  ) +
+  labs(
+    title = "Periods of High Unemployment in the US",
+    x = "Year",
+    y = "Unemployment",
+    color = "Condition"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# Part D: Faceting and Grouped Analysis
+# 1. Extraction of Year from Date Variable
+economics <- economics %>%
+  mutate(year = format(date, "%Y"))
+```
+
+```{r}
+# 2. Faceted Plots for Unemployment Trends
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line(color = "steelblue") +
+  facet_wrap(~ year, scales = "free_x") +
+  labs(
+    title = "Year-wise Unemployment Trends",
+    x = "Date",
+    y = "Unemployment"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# 3. Faceted Comparison of Savings Rate and Consumption
+ggplot(economics, aes(x = date, y = psavert)) +
+  geom_line(color = "darkgreen") +
+  facet_wrap(~ year) +
+  labs(title = "Savings Rate Across Years") +
+  theme_minimal()
+
+ggplot(economics, aes(x = date, y = pce)) +
+  geom_line(color = "purple") +
+  facet_wrap(~ year) +
+  labs(title = "Personal Consumption Expenditure Across Years") +
+  theme_minimal()
+```
+
+**Interpretation of Faceted Patterns**\
+
+The faceted plots reveal that unemployment, savings rate, and consumption fluctuate differently across years. Economic downturns show higher unemployment and savings rates, while stable periods reflect increased consumption and reduced savings, indicating higher consumer confidence.
+
+```{r}
+# Part E: Statistical Layers and Trend Analysis
+# 1. Adding Smooth Trend Lines
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line(color = "gray") +
+  geom_smooth(method = "loess", color = "red") +
+  labs(title = "Unemployment Trend with LOESS Smoothing") +
+  theme_minimal()
+```
+
+```{r}
+# 2. Comparison of Linear and LOESS Smoothing
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line(color = "gray") +
+  geom_smooth(method = "lm", color = "blue") +
+  geom_smooth(method = "loess", color = "red") +
+  labs(title = "Linear vs LOESS Smoothing Comparison") +
+  theme_minimal()
+```
+
+```{r}
+# 3. Distribution of Savings Rate
+ggplot(economics, aes(x = psavert)) +
+  geom_histogram(fill = "skyblue", bins = 30) +
+  labs(title = "Histogram of Savings Rate") +
+  theme_minimal()
+
+ggplot(economics, aes(x = psavert)) +
+  geom_density(fill = "orange", alpha = 0.6) +
+  labs(title = "Density Plot of Savings Rate") +
+  theme_minimal()
+```
+
+```{r}
+# Part F: Themes and Plot Customization
+# Application of Different Themes
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line() +
+  theme_minimal()
+
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line() +
+  theme_classic()
+
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line() +
+  theme_classic()
+```
+
+```{r}
+# 2. Customization of Plot Components
+ggplot(economics, aes(x = date, y = unemploy)) +
+  geom_line(color = "blue", size = 1) +
+  labs(
+    title = "Professional Economic Visualization",
+    x = "Year",
+    y = "Unemployment"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    legend.position = "bottom",
+    panel.grid.major = element_line(color = "gray90"),
+    panel.grid.minor = element_blank()
+  )
+```
+
+3.  **Professional Visualization Outcome**\
+    Through proper theme selection and customization, the final visualization achieves a clean, readable, and professional appearance suitable for economic reports and presentations.
+
+    ```{r}
+    # Part G: Coordinate Systems and Advanced Views
+    # Zooming into a Specific Economic Recession using coord_cartesian()
+    ggplot(economics, aes(x = date, y = unemploy)) +
+      geom_line(color = "darkred", size = 1) +
+      coord_cartesian(
+        xlim = as.Date(c("2008-01-01", "2010-12-31"))
+      ) +
+      labs(
+        title = "Unemployment During the 2008–2010 Recession",
+        x = "Year",
+        y = "Unemployment"
+      ) +
+      theme_minimal()
+    ```
+
+    ```{r}
+    # Applying coord_flip() and Its Impact on Readability
+    library(lubridate)
+
+    ggplot(economics, aes(
+      x = factor(year(date)),
+      y = psavert
+    )) +
+      geom_boxplot(fill = "skyblue") +
+      coord_flip() +
+      labs(
+        title = "Savings Rate Distribution by Year",
+        x = "Year",
+        y = "Savings Rate"
+      ) +
+      theme_minimal()
+    ```
+
+    ```{r}
+    # Dual Visualization Layout for Comparative Analysis
+    library(patchwork)
+
+    p1 <- ggplot(economics, aes(x = date, y = unemploy)) +
+      geom_line(color = "red") +
+      labs(title = "Unemployment Trend") +
+      theme_minimal()
+
+    p2 <- ggplot(economics, aes(x = date, y = psavert)) +
+      geom_line(color = "blue") +
+      labs(title = "Savings Rate Trend") +
+      theme_minimal()
+
+    p1 + p2
+    ```
+
+## **Part H: Interpretation and Insights**
+
+1.  **Identification of Economic Stress Periods**\
+    Periods of economic stress are characterized by a sharp increase in unemployment and a simultaneous rise in savings rate. These patterns are clearly visible during recession phases such as the 2008 financial crisis, where uncertainty caused job losses and increased precautionary savings.
+
+2.  **Relationship Between Unemployment and Consumption**\
+    An inverse relationship is observed between unemployment and personal consumption expenditure. As unemployment rises, consumer spending generally declines due to reduced income and lower consumer confidence. Visualization layers such as color, smoothing lines, and scaling make this relationship easier to interpret.
+
+3.  **Impact of Visualization Layers on Interpretation**\
+    Different visualization layers significantly influence data interpretation. Aesthetic mappings highlight important variables, smoothing layers reveal long-term trends, and coordinate transformations improve focus on critical periods. Together, these layers transform raw data into meaningful economic insights.
+
+    ```{r}
+    # Part I: Exploratory and Open-Ended Tasks
+    # 1. Custom Visualization for Economic Insight
+    ggplot(economics, aes(x = date)) +
+      geom_line(aes(y = unemploy), color = "red") +
+      geom_line(aes(y = psavert * 1000), color = "blue") +
+      labs(
+        title = "Unemployment and Savings Rate Relationship",
+        x = "Year",
+        y = "Scaled Values"
+      ) +
+      theme_minimal()
+    ```
+
+**Role of Visualization in Policy Making and Forecasting**
+
+Well-designed economic visualizations help policymakers quickly identify trends, assess the severity of recessions, and evaluate the effectiveness of economic policies. In forecasting, visual analysis supports early detection of warning signs such as rising unemployment or declining consumption.

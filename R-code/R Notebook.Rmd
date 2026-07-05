@@ -1,0 +1,236 @@
+---
+title: "R Notebook"
+output: html
+---
+
+Datatypes
+
+```{r}
+# Datatypes
+print ("HEllo")
+v <- 2.3
+print(class(v))
+v <- TRUE
+print(class(v))
+v <- 2L
+print(class(v))
+```
+
+```{r}
+# vectors
+apple <- c('red','yellow', 'green')
+print(class(apple))
+print(apple)
+
+# list
+list1 <- list(c(2,5,3), 21.3, sin)
+print(list1)
+
+# matrics
+M=matrix(c('a','a','b','b','c','c','b','b','c','c'),nrow=5,ncol=2,byrow=TRUE)
+print(M)
+
+# array
+a <- array(c('green','yellow', 'blue', 'red','orange'), dim=c(3,3,1))
+print(a)
+```
+
+```{r}
+# factors
+colors <- c('red','orange','yellow','green','blue','purple')
+factor_colors <- factor(colors)
+print(factor_colors)
+print(nlevels(factor_colors))
+
+# variables
+var.1 = c(0,1,2,3,4)
+var.2 = c("learn", "R")
+var.3 = c(TRUE, 1)
+cat(var.1, var.2, var.3)
+```
+
+Operators
+
+```{r}
+# Operators(arithmetic)
+int1 <- c(1, 2, 3, 4)
+int2 <- c(1, 2, 3, 4)
+print(int1+int2)
+print(int1-int2)
+print(int1*int2)
+print(int1/int2)
+# Operators(relational)
+print(3>2)
+# Operators(logical)
+v <-c(3, 1, TRUE, 2+3i)
+t <- c(4, 1, FALSE, 2+3i)
+print(v & t)
+
+# Assignment Operators
+v1 <- c(3, 1, TRUE, 2+3i)
+v2 <<- c(3, 1, TRUE, 2+3i)
+v3=c(3, 1, TRUE, 2+3i)
+print(v1)
+print(v2)
+print(v3)
+```
+
+Loops
+
+```{r}
+# for loops
+# vector
+fruit<-c('Apple','Orange', 'Guava')
+for (i in fruit){
+  print(i)
+}
+
+# matrix
+mat <- matrix(data=seq(10, 21, by=1), nrow=6, ncol=2)
+for (r in 1:nrow(mat))
+  for (c in 1:ncol(mat))
+    print(paste("mat[",r, ",", c, "]=", mat[r,c]))
+print(mat)
+
+# While loop
+v <- c("Hello", "while loop")
+cnt <- 2
+while(cnt<7){
+  print(v)
+  cnt = cnt + 1
+}
+```
+
+Functions
+
+```{r}
+# Built-in functions 
+
+# create a sequence of numbers frm 32 to 44.
+print(seq(32, 44))
+
+# find mean of numbers from 25 to 82.
+print(mean(25:82))
+
+# Find sum of numbers from 41 to 68.
+print(sum(41:68))
+
+
+```
+
+User-defined functions
+
+```{r}
+# function to calculate square of a number
+new.function <-function(a){
+    for(i in 1:a){
+        b<- i^2
+        print(b)
+    } 
+}
+new.function(6)
+```
+
+Data frames
+
+```{r}
+# Program to join columns and rows in a dataframe.
+Name<- c("Shubhan Rastogi", "Aarav Sharma", "Anika Singh", "Riya Mehta")
+Address<- c("Delhi", "Mumbai", "Kolkata", "Chennai")
+Marks<- c(85, 92, 88, 76)
+info <- cbind(Name, Address, Marks)
+print(info)
+
+new.studinfo <- data.frame(
+    Name =c("Deepak Kumar", "Sneha Gupta", "Karan Patel", "Pooja Joshi"),
+    Address =c("Bangalore", "Hyderabad", "Pune", "Ahmedabad"),
+    Marks =c(89, 94, 91, 78),
+    stringsAsFactors=FALSE
+)
+cat("### New Data Frame ###\n")
+print(new.studinfo)
+
+all.info <- rbind(info, new.studinfo)
+cat("### Combined Data Frame ###\n")
+print(all.info)
+```
+
+```{r}
+# String Manipulaton Functions
+
+# String concatenation
+str <- paste("R", "is", "a", "programming", "language")
+print(str)
+str <- cat("R", "is", "a", "programming", "language", sep=":")
+print(str)
+```
+
+Data Structures
+
+```{r}
+# Vectors
+apple<-c('red','green','yellow')
+print(apple)
+print(class(apple))
+
+# Lists
+list1 <- list(c(2,3,5), 21.3, sin)
+print(list1)
+
+# Matrices
+M = matrix(c('a','b','c','d','e','f'), nrow=2, ncol=3, byrow=TRUE)
+print(M)
+
+# Data Frames
+df <- data.frame(
+    Training=c("strength", "stamina", "flexibility"),
+    Duration=c(60, 45, 30),
+    Calories_Burned=c(500, 400, 200)
+)
+print(df)
+```
+
+Data Handling
+
+```{r}
+print(getpwd())
+setwd("..")
+print(getwd())
+
+# Data Reading
+data<-read_.csv("records.csv")
+print(data)
+
+# Data Analysis
+csv_data<-read.csv("record.csv")
+print(is.data.frame(csv_data))
+print(ncol(csv_data))
+print(nrow(csv_data))
+
+# Getting Maximum salary
+csv_data<- read.csv("record.csv")
+max_salry <- max(csv_data$Salary)
+print(max_salary)
+
+# Details of employee working in IT department
+csv_data<- read.csv("record.csv")
+details<-subset(csv_data, dept=="IT")
+print(details)
+
+# Details of employee having salary > 50000 and working in IT Department
+csv_data<- read.csv("record.csv")
+details<-subset(csv_data, Salary>50000 & dept=="IT")
+print(details)
+
+# Details of employees joined on or after 2014
+csv_data<- read.csv("record.csv")
+details<-subset(csv_data, as.Date(start_date) > as.Date("2014-01-01"))
+print(details)
+
+# Data Writing
+csv_data<- read.csv("record.csv")
+details<subset(csv_data, as.Date(start_date) > as.Date("2014-01-01"))
+write.csv(details, "output.csv")
+new_details<-read.csv("output.csv")
+print(new_details)
+```

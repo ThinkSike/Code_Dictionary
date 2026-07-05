@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" ng-app="whiteboardApp">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MEAN Whiteboard</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; font-family: Arial, sans-serif; }
+    .toolbar {
+      position: fixed; top: 0; left: 0; right: 0; height: 56px; background: #1f2937; color: #fff;
+      display: flex; align-items: center; gap: 12px; padding: 0 12px; z-index: 2;
+    }
+    .toolbar input[type="color"] { width: 32px; height: 32px; border: none; padding: 0; background: transparent; }
+    .toolbar input[type="range"] { width: 120px; }
+    .toolbar .spacer { flex: 1; }
+    .toolbar a { color: #93c5fd; text-decoration: none; }
+    canvas { position: absolute; top: 56px; left: 0; right: 0; bottom: 0; width: 100vw; height: calc(100vh - 56px); background: #ffffff; touch-action: none; }
+  </style>
+</head>
+<body ng-controller="BoardCtrl">
+  <div class="toolbar">
+    <strong>Whiteboard</strong>
+    <span>Board:</span>
+    <code>{{boardId}}</code>
+    <span class="spacer"></span>
+    <label>Color: <input type="color" ng-model="color" /></label>
+    <label>Size: <input type="range" min="1" max="30" ng-model="width" /></label>
+    <button ng-click="undo()">Undo</button>
+    <button ng-click="clear()">Clear</button>
+    <span class="spacer"></span>
+    <a ng-href="{{shareUrl}}" target="_blank">Share</a>
+  </div>
+  <canvas id="board"></canvas>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="style.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+</head>
+<body>
+
+    <form>
+        <h1>Membership Registration Form</h1>
+        <!-- (Textbox)-->
+        <label for="Name">Full Name:</label>  <br>
+        <input type="text" id="fname" name="fname" hint="First name">
+        <input type="text" id="lname" name="lname" hint="Last name"><br>
+
+        <!-- Email -->
+        <label for="email">Email:</label>  <br>
+        <input type="text" id="email" name="email" hint="example@abc.com"><br>
+
+        <!-- Phone, Number -->
+        <label for="Phone">Contact no.:</label>  <br>
+        <input type="text" id="phno" name="phno" hint="123-456-7890"><br>
+
+        <!-- Textarea -->
+        <label for="Textarea">Home Address:</label>  <br>
+        <textarea id="Textarea" name="Textarea" rows="5" cols="33" hint="Tell us about yourself.." type=text></textarea><br>
+
+        <!-- Radio -->
+        <label for="Radio">Gender:</label>  <br>
+
+            <input type="radio" name="options" value="Male">
+            <label for="Male" class="btn gender">Male</label> 
+
+            <input type="radio" name="options" value="NA">
+            <label for="NA" class="btn gender">Not prefer to say</label> <br> 
+
+            <input type="radio" name="options" value="Female">
+            <label for="Female" class="btn gender">Female</label> <br>
+
+        <!-- Date, Month -->
+        <label for="Date">Date of Birth:</label>  <br>
+        <input type="date" id="date" name="date" hint="Select Date"><br>
+        
+        <!-- Textarea -->
+        <label for="Textarea">Why do you want to be a part of this club?:</label>  <br>
+        <textarea id="textarea2" name="textarea2" rows="5" cols="33" hint="Tell us about yourself.." type=text></textarea><br>
+
+        <!-- List, checkbox, Search -->
+        <label>Clubs</label><br>
+        <div class="drop-down">
+            <input type="text" id="club" placehoder="Search for clubs" onkeyup="filterClubs()">
+            <select id="club" size="10">
+                <option value="Editing Club"><input type="checkbox" value="Editing Club">Editing Club</option>
+                <option value="Art and Culture Club"><input type="checkbox" value="Editing Club">Art and Culture Club</option>
+                <option value="Gaming Club"><input type="checkbox" value="Editing Club">Gaming Club</option>
+                <option value="Coding Club"><input type="checkbox" value="Editing Club">Coding Club</option>
+                <option value="Blogging Club"><input type="checkbox" value="Editing Club">Blogging Club</option>
+        </div>
+        <!-- <style>
+            *{
+                box-sizing: border-box;
+            }
+            #myInput{
+                background-image: url('/css/searchicon.png');
+                background-position: 10px 12px;
+                background-repeat: no-repeat;
+                width: 100%;
+            }
+        </style>
+        <input type="text" id="myInput" onkeyup="filterList()" placeholder="Search for clubs.." title="Type a club in">
+    <ul id="myUL">
+        <li><a href="#">Editing Club</a></li>
+        <li><a href="#">Art and Culture Club</a></li>
+        <li><a href="#">Gaming Club</a></li>
+        <li><a href="#">Coding Club</a></li>
+        <li><a href="#">Blogging Club</a></li>
+    </ul>
+    <script>
+        function filterLlist(){
+            var input, filter, ul, li, a, i, txtVal;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("myUL");
+            li = ul.getElementsByTagName("li");
+
+            for(i = 0; i < li.length; i++){
+                a = li[i].getElementsByTagName("a")[0];
+                txtVal = a.textContent || a.innerText;
+                
+                if(txtVal = toUpperCase().indexOf(filter) > -1){
+                    li[i].style.display = "";
+                } else{
+                    li[i].style.display = "none";
+                }
+            }
+        }
+    </script> -->
+        <!-- number of members in each club -->
+        <!-- <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterList()">
+        <div id="checkboxList">
+            <label class="item"><input type="checkbox" value="Editing Club">Editing Club</label>
+            <label class="item"><input type="checkbox" value="Art and Culture Club">Art and Culture Club</label>
+            <label class="item"><input type="checkbox" value="Gaming Club">Gaming Club</label>
+            <label class="item"><input type="checkbox" value="Coding Club">Coding Club</label>
+            <label class="item"><input type="checkbox" value="Blogging Club">Blogging Club</label>
+        </div>  -->
+        <!-- <script>
+            function filterList(){
+                const input = document.getElementById('searchInput').value.toLowerCase();
+                const items = document.querySelectorAll('checkboxlist.item');
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    item.style.display = text.includes(input)? '' : 'none';
+                }); 
+            }
+        </script> -->
+        <!-- Reset, Submit, Button -->
+        <input type="reset" value="Reset">
+        <input type="submit" value="Submit"><br>
+    </form>
+</body>
+</html>
+
+<!--(Password, Time, Image, File Upload, Range, etc.) -->
+<!-- #myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myUL {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#myUL li a {
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  display: block
+}
+
+#myUL li a:hover:not(.header) {
+  background-color: #eee;
+}
+</style>
+</head>
+<body>
+
+<script>
+
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Searchable Country Dropdown</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .dropdown-container {
+      width: 300px;
+      margin: 20px auto;
+    }
+    #countryInput {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    #countryDropdown {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="dropdown-container">
+    <input type="text" id="countryInput" placeholder="Search for a country..." onkeyup="filterCountries()">
+    <select id="countryDropdown" size="10">
+      <option value="India">India</option>
+      <option value="United States">United States</option>
+      <option value="United Kingdom">United Kingdom</option>
+      <option value="Canada">Canada</option>
+      <option value="Australia">Australia</option>
+      <option value="Germany">Germany</option>
+      <option value="France">France</option>
+      <option value="Japan">Japan</option>
+      <option value="China">China</option>
+      <option value="Brazil">Brazil</option>
+    </select>
+  </div>
+
+  <script>
+    function filterCountries() {
+      const input = document.getElementById('countryInput').value.toLowerCase();
+      const dropdown = document.getElementById('countryDropdown');
+      const options = dropdown.options;
+
+      for (let i = 0; i < options.length; i++) {
+        const optionText = options[i].text.toLowerCase();
+        options[i].style.display = optionText.includes(input) ? '' : 'none';
+      }
+    }
+  </script>
+</body>
+</html>
+ -->
